@@ -15,24 +15,11 @@ h2 {
     color: orange;
 }
 
-/* ===================================================
-    Classes 
-====================================================== */
-
-.paragraph {
-    color: rgb(255, 255, 255);
-    background-color: rgb(69, 69, 69);
-    height: 50px;
-
-}
-
-.someClass {
-    margin: 0%;
-    border: 0%;
-    padding: 0%;
-}
 
 ul {
+    /*
+    position: fixed;
+    */
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -56,6 +43,25 @@ li a {
 li a:hover {
     background-color: #111;
 }
+
+
+/* ===================================================
+    Classes 
+====================================================== */
+
+.paragraph {
+    color: rgb(255, 255, 255);
+    background-color: rgb(69, 69, 69);
+    height: 50px;
+
+}
+
+.someClass {
+    margin: 0%;
+    border: 0%;
+    padding: 0%;
+}
+
 
 /* ===================================================
     ID selectors 
