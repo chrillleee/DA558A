@@ -5,17 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/baseStyle.css" />
+    <link rel="stylesheet" href="../styles/contactStyle.css" />
     <title>Contact</title>
 </head>
 
 <body>
     <div>
-        <ul id="ulNavigationBar">
+        <ul class="ulNavigationBar">
             <li class="liNavigationBar"><a href="../index.html">Home</a></li>
             <li class="liNavigationBar"><a href="./skills.html">Skills</a></li>
             <li class="liNavigationBar"><a href="./contact.html">Contact</a></li>
             <li class="liNavigationBar"><a href="./about.html">About</a></li>
         </ul>
+    </div>
+
+    <div class="container">
+        <form action="./silly.html">
+
+            <label for="fname">First Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name..">
+
+            <label for="lname">Last Name</label>
+            <input type="text" id="email" name="email" placeholder="Please enter your email..">
+
+            <label for="subject">Subject</label>
+            <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+            <input type="submit" value="Submit">
+        </form>
     </div>
 
 </body>
