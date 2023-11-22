@@ -1,13 +1,65 @@
-.paragraph {
-    color: rgb(143, 143, 143);
-    background-color: rgba(255, 0, 0, 0.4);
-    height: 50px;
+/* ===================================================
+    Basic HTML elements 
+====================================================== */
 
+body {
+    background-color: rgb(69, 69, 69);
+    margin: 0 0 0 0;
 }
 
 h2 {
     border: 1px solid green;
 }
+
+[target] {
+    color: orange;
+}
+
+/* ===================================================
+    Classes 
+====================================================== */
+
+.paragraph {
+    color: rgb(255, 255, 255);
+    background-color: rgb(69, 69, 69);
+    height: 50px;
+
+}
+
+.someClass {
+    margin: 0%;
+    border: 0%;
+    padding: 0%;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+    background-color: #111;
+}
+
+/* ===================================================
+    ID selectors 
+====================================================== */
 
 #background-section {
     width: 40%;
@@ -32,8 +84,4 @@ h2 {
 
 #myLink {
     text-decoration: none;
-}
-
-[target] {
-    color: orange;
 }
