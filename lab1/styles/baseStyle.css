@@ -11,31 +11,35 @@ body {
     padding: 0;
 }
 
-h2 {
-    border: 1px solid green;
-}
-
-[target] {
-    color: orange;
-}
-
-
-
 
 /* ===================================================
 Classes 
 ====================================================== */
+
+/* Centered Content */
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: 62%;
+    margin-left: 19%;
+    border: 5px solid black;
+    flex-wrap: wrap;
+}
+
+/* Navigation Bar */
+
 .divNavigationBar {
-    /*
-    */
     position: fixed;
+    top: 0;
     width: 100%;
     height: auto;
     overflow: hidden;
     background-color: #333;
 }
 
-/* Navigation Bar */
 .navbar {
     display: flex;
     justify-content: space-evenly;
@@ -57,19 +61,7 @@ Classes
     background-color: #111;
 }
 
-.paragraph {
-    color: rgb(255, 255, 255);
-    background-color: rgb(69, 69, 69);
-    height: 50px;
-
-}
-
-.someClass {
-    margin: 0%;
-    border: 0%;
-    padding: 0%;
-}
-
+/* Other */
 
 .imgLarge {
     width: 300px;
@@ -80,37 +72,10 @@ Classes
 /* ===================================================
     ID selectors 
 ====================================================== */
-#introText {
-    width: 40%;
-    text-align: center;
-}
-
-#Page1Img {
-    width: 40%;
-    text-align: center;
-}
-
-#background-section {
-    width: 40%;
-    border: 1px solid black;
-    text-align: center;
-    letter-spacing: 12px;
-}
-
-#background-section p {
-    height: auto;
-}
-
-#typography-section p {
-    width: 40%;
-    height: auto;
-}
-
-#colors-paragraph {
-    text-decoration: underline;
-    font-family: 'Times New Roman';
-}
-
-#myLink {
-    text-decoration: none;
+/* Top container */
+#top-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
 }
