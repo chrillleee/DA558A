@@ -9,12 +9,19 @@ img {}
 ====================================================== */
 
 .imgSmall {
-    width: 600px;
+    width: 300px;
     height: auto;
+    transition: width 1s ease-in-out;
 }
 
+.imgSmall:hover {
+    width: 600px;
+    height: 100%;
+    transition: width 1s ease-in-out;
+}
 
 .box {
+    border: 5px solid black;
     padding: 10px 10px;
 }
 
