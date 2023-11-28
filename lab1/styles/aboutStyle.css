@@ -2,11 +2,7 @@
 Basic HTML elements 
 ====================================================== */
 
-img {
-    max-width: 50%;
-    height: auto;
-    /* Maintain aspect ratio */
-}
+img {}
 
 /* ===================================================
     Classes 

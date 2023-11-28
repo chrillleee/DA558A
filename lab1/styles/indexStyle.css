@@ -2,7 +2,7 @@
     Basic HTML elements 
 ====================================================== */
 
-
+img {}
 
 /* ===================================================
 Classes 
@@ -25,4 +25,10 @@ Classes
 
 #cont2 {}
 
-#cont3 {}
+#cont3 {
+    display: flex;
+    flex-direction: row;
+    padding: 10px, 10px;
+    height: 100px;
+
+}

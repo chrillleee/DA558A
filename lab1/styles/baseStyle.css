@@ -8,6 +8,8 @@ body {
     width: 100%;
     height: 100%;
     margin: 0;
+    margin-top: 4%;
+    margin-bottom: 4%;
     padding: 0;
 }
 
@@ -44,7 +46,7 @@ Classes
     display: flex;
     justify-content: space-evenly;
     background-color: #333;
-    padding: 10px 0;
+    padding: 6px 0;
 }
 
 .navbar a {
@@ -61,13 +63,45 @@ Classes
     background-color: #111;
 }
 
+/* Loggo Bar */
+
+.loggo-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    height: auto;
+    width: auto;
+    margin-right: 3%;
+    margin-bottom: 1%;
+    border: 5px solid black;
+    flex-wrap: wrap;
+}
+
+.loggo {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    height: auto;
+    width: auto;
+    margin-right: 3px;
+    border: 2px solid black;
+    flex-wrap: wrap;
+}
+
+.loggo img {
+    width: 45px;
+    height: auto;
+}
+
 /* Other */
 
 .imgLarge {
     width: 300px;
     height: auto;
 }
-
 
 /* ===================================================
     ID selectors 
@@ -77,5 +111,7 @@ Classes
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100px;
+    height: 0px;
+    width: 0%;
+    margin-left: 0%;
 }
