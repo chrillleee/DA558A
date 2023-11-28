@@ -3,8 +3,12 @@
 ====================================================== */
 
 body {
-    background-color: rgb(69, 69, 69);
+    background-color: rgb(77, 77, 77);
     margin: 0 0 0 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 h2 {
@@ -21,31 +25,35 @@ h2 {
 /* ===================================================
 Classes 
 ====================================================== */
-.ulNavigationBar {
+.divNavigationBar {
     /*
-    position: fixed;
     */
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+    position: fixed;
+    width: 100%;
+    height: auto;
     overflow: hidden;
     background-color: #333;
 }
 
-.liNavigationBar {
-    float: left;
+/* Navigation Bar */
+.navbar {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: #333;
+    padding: 10px 0;
 }
 
-.liNavigationBar a {
-    display: block;
+.navbar a {
     color: white;
-    text-align: center;
-    padding: 14px 16px;
+    padding: 10px 15px;
     text-decoration: none;
+    text-align: center;
+    width: 100%;
+    transition: background-color 0.3s;
+    border-radius: 13px;
 }
 
-/* Change the link color to #111 (black) on hover */
-.liNavigationBar a:hover {
+.navbar a:hover {
     background-color: #111;
 }
 
@@ -63,9 +71,24 @@ Classes
 }
 
 
+.imgLarge {
+    width: 300px;
+    height: auto;
+}
+
+
 /* ===================================================
     ID selectors 
 ====================================================== */
+#introText {
+    width: 40%;
+    text-align: center;
+}
+
+#Page1Img {
+    width: 40%;
+    text-align: center;
+}
 
 #background-section {
     width: 40%;

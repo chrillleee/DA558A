@@ -1,0 +1,88 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+.clear-fix {
+  clear: both;
+  margin-top: 100px;
+  padding-top: 10px;
+  border-top: 1px solid red;
+}
+
+/* Centered Content */
+.centered-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  background-color: #f0f0f0;
+}
+
+/* Card Layout */
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+}
+.card {
+  flex-basis: calc(33.333% - 20px);
+  margin: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: space-evenly;
+  background-color: #333;
+  padding: 10px 0;
+}
+.navbar a {
+  color: white;
+  padding: 10px 15px;
+  text-decoration: none;
+}
+
+/* Layout with Sidebar */
+.layout {
+  display: flex;
+}
+.sidebar {
+  flex: 0 0 200px;
+  background-color: #f4f4f4;
+}
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+/* Vertical Navigation */
+.vertical-nav {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  background-color: #f4f4f4;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.vertical-nav a {
+  padding: 10px 15px;
+  text-decoration: none;
+  color: black;
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+  box-sizing: border-box;
+  transition: background-color 0.3s;
+}
+.vertical-nav a:hover {
+  background-color: #eaeaea;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f0f0f0;
+}

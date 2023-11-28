@@ -1,0 +1,44 @@
+/* ===================================================
+Basic HTML elements 
+====================================================== */
+
+img {
+    max-width: 50%;
+    height: auto;
+    /* Maintain aspect ratio */
+}
+
+/* ===================================================
+    Classes 
+====================================================== */
+
+.imgSmall {
+    width: auto;
+    height: auto;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    border: 5px solid black;
+    flex-wrap: wrap;
+}
+
+.box {
+    width: 1080px;
+    margin: 10px;
+    padding: 50px;
+}
+
+/* ===================================================
+    ID selectors 
+====================================================== */
+
+
+#box1 {}
+
+#box2 {}
+
+#box3 {}
+
+#box4 {}
