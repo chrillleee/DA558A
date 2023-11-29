@@ -20,7 +20,7 @@ textarea {
     /* Full width */
     padding: 12px;
     /* Some padding */
-    border: 1px solid #ccc;
+    border: 1px solid #575757;
     /* Gray border */
     border-radius: 4px;
     /* Rounded borders */
@@ -36,7 +36,7 @@ textarea {
 
 /* Style the submit button with a specific background color etc */
 input[type=submit] {
-    background-color: #04AA6D;
+    background-color: rgb(77, 77, 77);
     color: white;
     padding: 12px 20px;
     border: none;
@@ -46,14 +46,15 @@ input[type=submit] {
 
 /* When moving the mouse over the submit button, add a darker green color */
 input[type=submit]:hover {
-    background-color: #45a049;
+    background-color: black;
 }
 
 /* Add a background color and some padding around the form */
 #cont1 {
-    background-color: #f2f2f2;
+    background-color: #858585;
     padding-top: 20px;
     padding-bottom: 20px;
+    border-radius: 15px;
 }
 
 /* ===================================================
