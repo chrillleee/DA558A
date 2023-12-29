@@ -102,8 +102,43 @@ class UserData
   }
 }
 
+function nextQuiz()
+{
+  const nameForm = document.getElementById("nameForm");
+  nameForm.classList.add("hide")
+  console.log("started ")
+}
+
+function prevQuiz()
+{
+  const nameForm = document.getElementById("nameForm");
+  nameForm.classList.remove("hide")
+  console.log("Hello there, the game is started ")
+}
+
+function submitForm()
+{
+  const nameForm = document.getElementById("nameForm");
+  const quizContainer = document.getElementById("quiz-container")
+  nameForm.classList.add("hide")
+  quizContainer.classList.remove("hide")
+  console.log("Hello there, the game is started ")
+}
+
 const theQuiz = new Quiz();
 theQuiz.setData(theRawData);
 theQuiz.userData.setFirstName("Acs");
 console.log(theQuiz)
 
+const startButton = document.getElementById("next-button")
+const prevButton = document.getElementById("prev-button")
+const submitFormButton = document.getElementById("form-button")
+
+startButton.addEventListener('click',nextQuiz)
+prevButton.addEventListener('click',prevQuiz)
+submitFormButton.addEventListener('click',function(event)
+{
+  event.preventDefault();
+  submitForm();
+  console.log("here")
+})

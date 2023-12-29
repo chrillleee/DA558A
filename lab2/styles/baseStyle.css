@@ -27,8 +27,8 @@ Classes
     height: auto;
     width: 62%;
     margin-left: 19%;
- 
     flex-wrap: wrap;
+    border: 2px solid black;
 }
 
 /* Loggo Bar */
@@ -70,12 +70,71 @@ Classes
     transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
+/* Q&A */
+.quiz-container {}
+
+.btn {
+    background-color: rgb(77, 77, 77);
+    color: white;
+    padding: 12px 20px;
+    border: 2px solid black;
+    /* border: none; */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease-in-out;
+    margin: 5px;
+}
+
+.btn:hover {
+    background-color: black;
+    box-shadow: 0 0 10px 2px;
+}
+
+/* form */
+
+input[type=text],
+select,
+textarea {
+    width: 100%;
+    /* Full width */
+    padding: 12px;
+    /* Some padding */
+    /* Gray border */
+    border-radius: 4px;
+    /* Rounded borders */
+    box-sizing: border-box;
+    /* Make sure that padding and width stays in place */
+    margin-top: 6px;
+    /* Add a top margin */
+    margin-bottom: 16px;
+    /* Bottom margin */
+    resize: vertical
+        /* Allow the user to vertically resize the textarea (not horizontally) */
+}
+
+/* Add a background color and some padding around the form */
+#cont1 {
+    background-color: #858585;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 15px;
+}
+
+
+
+
 /* Other */
+
+.hide {
+    display: none;
+}
 
 .imgLarge {
     width: 300px;
     height: auto;
 }
+
+
 
 /* ===================================================
     ID selectors 

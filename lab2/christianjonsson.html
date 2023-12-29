@@ -28,11 +28,29 @@
         </div>
     </div>
 
-    <div class="quiz-container">
-        
+    <div class="centered-container">
+        <form id="nameForm">
+            <label for="fname">First name</label>
+            <input type="text" id="fname" name="fname" placeholder="Please enter your first name..">
 
+            <label for="lname">Last name</label>
+            <input type="text" id="lname" name="lname" placeholder="Please enter your last name..">
+
+            <label for="lname">E-mail</label>
+            <input type="text" id="email" name="email" placeholder="Please enter your e-mail..">
+
+            <input type="submit" value="Submit" class="btn" id="form-button">
+        </form>
+
+        <div class="hide" id="quiz-container">
+            <div id="question">Question</div>
+            <div id="answer">Answer</div>
+            <div id="buttonContainer">
+                <button id="next-button" class="btn">Next</button>
+                <button id="prev-button" class="btn">Previous</button>
+            </div>
+        </div>
     </div>
-
     <!-- Content  -->
     <script src="./christianjonsson.js"></script>
 
