@@ -36,6 +36,7 @@ class Quiz
   {
     this.data = {};
     this.userData = new UserData();
+    this.currentQuestion = 0;
   }
 
   setData(jsonFile)
@@ -55,6 +56,26 @@ class Quiz
   {
     return this.data;
   }
+
+  NextQuestion()
+  {
+    this.currentQuestion = Math.min(this.currentQuestion++,this.data.length);
+  }
+
+  PreviousQuestion()
+  {
+    this.currentQuestion = Math.max(this.currentQuestion--,0);
+  }
+
+  GetQuestion()
+  {
+    return this.data.questions[this.currentQuestion].question;
+  }
+
+  GetAnswers()
+  {
+    return this.data.questions[this.currentQuestion].answers;
+  }
 }
 
 class UserData
@@ -64,6 +85,7 @@ class UserData
     this.firstName = {};
     this.lastName = {};
     this.lastEmail = {};
+    this.currentQuestion = 0;
   }
 
   setFirstName(name)
@@ -86,11 +108,6 @@ class UserData
       this.lastName = name;
   }
 
-  setEmail()
-  {
-    
-  } 
-
   isValidName(name)
   {
     var letters = /^[A-Za-z]+$/;
@@ -100,6 +117,26 @@ class UserData
     }
     return true;
   }
+
+  setEmail(email)
+  {
+    if(!this.isValidEmail(email))
+    {
+      alert('Invalid Email, please try again');
+    }
+    this.email = email;
+  } 
+  
+  isValidEmail(email)
+  {
+    var letters = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!email.match(letters))
+    {
+      return false;
+    }
+    return true;
+  }
+
 }
 
 function nextQuiz()
@@ -116,18 +153,54 @@ function prevQuiz()
   console.log("Hello there, the game is started ")
 }
 
+function paintQuestion(theQuiz)
+{
+  const question = document.getElementById("question");
+  const textNode = document.createTextNode(theQuiz.GetQuestion());
+  
+  if(question.firstChild==null)
+  {
+    question.appendChild(textNode,question);
+    return;
+  }
+  
+  console.log(question)
+  question.replaceChild(textNode,question.firstChild)
+}
+
+function paintAnswer(theQuiz)
+{
+  const answer = document.getElementById("answer");
+  const textNode = document.createTextNode(theQuiz.GetAnswers());
+  
+  if(answer.firstChild==null)
+  {
+    answer.appendChild(textNode,question);
+    return;
+  }
+  
+  console.log(answer)
+  answer.replaceChild(textNode,answer.firstChild)
+}
+
+
+
 function submitForm()
 {
   const nameForm = document.getElementById("nameForm");
   const quizContainer = document.getElementById("quiz-container")
   nameForm.classList.add("hide")
   quizContainer.classList.remove("hide")
-  console.log("Hello there, the game is started ")
+  theQuiz.userData.setFirstName(nameForm.elements['fname'].value);
+  theQuiz.userData.setLastName(nameForm.elements['lname'].value);
+  theQuiz.userData.setEmail(nameForm.elements['email'].value);
+
+  console.log(theQuiz)
 }
 
 const theQuiz = new Quiz();
 theQuiz.setData(theRawData);
-theQuiz.userData.setFirstName("Acs");
+// theQuiz.userData.setFirstName("Acs");
 console.log(theQuiz)
 
 const startButton = document.getElementById("next-button")
@@ -142,3 +215,9 @@ submitFormButton.addEventListener('click',function(event)
   submitForm();
   console.log("here")
 })
+
+submitForm()
+paintQuestion(theQuiz)
+paintQuestion(theQuiz)
+paintAnswer(theQuiz)
+paintAnswer(theQuiz)
