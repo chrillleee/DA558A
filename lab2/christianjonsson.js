@@ -35,7 +35,6 @@ class Quiz
   constructor()
   {
     this.data = {};
-    this.userData = new UserData();
     this.currentQuestion = 0;
   }
 
@@ -44,7 +43,6 @@ class Quiz
     try
     {
       this.data = jsonFile;
-      console.log("Reading JSON successful")
     }
     catch(error)
     {
@@ -59,16 +57,18 @@ class Quiz
 
   NextQuestion()
   {
-    this.currentQuestion = Math.min(this.currentQuestion++,this.data.length);
+    this.currentQuestion = Math.min(++this.currentQuestion,this.data.questions.length - 1);
   }
 
   PreviousQuestion()
   {
-    this.currentQuestion = Math.max(this.currentQuestion--,0);
+    this.currentQuestion = Math.max(--this.currentQuestion,0);
   }
 
   GetQuestion()
   {
+    console.log(this.data.questions)
+    console.log(this.currentQuestion)
     return this.data.questions[this.currentQuestion].question;
   }
 
@@ -92,18 +92,16 @@ class UserData
   {
     if(!this.isValidName(name))
     {
-      alert('Invalid name, please try again');
+      alert('Invalid first name, please try again');
     }
     this.firstName = name;
-    console.log("Name successful")
-
   } 
 
   setLastName(name)
   {
       if(!this.isValidName(name))
       {
-        alert('Invalid name, please try again');
+        alert('Invalid last name, please try again');
       }
       this.lastName = name;
   }
@@ -136,88 +134,120 @@ class UserData
     }
     return true;
   }
-
 }
 
-function nextQuiz()
+class PageHandler
 {
-  const nameForm = document.getElementById("nameForm");
-  nameForm.classList.add("hide")
-  console.log("started ")
-}
-
-function prevQuiz()
-{
-  const nameForm = document.getElementById("nameForm");
-  nameForm.classList.remove("hide")
-  console.log("Hello there, the game is started ")
-}
-
-function paintQuestion(theQuiz)
-{
-  const question = document.getElementById("question");
-  const textNode = document.createTextNode(theQuiz.GetQuestion());
-  
-  if(question.firstChild==null)
+  constructor()
   {
-    question.appendChild(textNode,question);
-    return;
+    this.quiz = new Quiz;
+    this.userData = new UserData();
   }
-  
-  console.log(question)
-  question.replaceChild(textNode,question.firstChild)
-}
 
-function paintAnswer(theQuiz)
-{
-  const answer = document.getElementById("answer");
-  const textNode = document.createTextNode(theQuiz.GetAnswers());
-  
-  if(answer.firstChild==null)
+  submitForm()
   {
-    answer.appendChild(textNode,question);
-    return;
+    const nameForm = document.getElementById("nameForm");
+    const quizContainer = document.getElementById("quiz-container")
+    nameForm.classList.add("hide")
+    quizContainer.classList.remove("hide")
+    this.userData.setFirstName(nameForm.elements['fname'].value);
+    this.userData.setLastName(nameForm.elements['lname'].value);
+    this.userData.setEmail(nameForm.elements['email'].value);
+    console.log(this.userData);
   }
-  
-  console.log(answer)
-  answer.replaceChild(textNode,answer.firstChild)
+
+
+  nextQuiz()
+  {
+    const nameForm = document.getElementById("nameForm");
+    nameForm.classList.add("hide");
+    this.quiz.NextQuestion()
+    this.paintQuestion(this.quiz)
+    this.paintAnswer(this.quiz)
+  }
+
+  prevQuiz()
+  {
+    const nameForm = document.getElementById("nameForm");
+    const quizContainer = document.getElementById("quiz-container");
+    
+    if(nameForm.classList.contains("hide") && this.quiz.currentQuestion == 0)
+    {
+      nameForm.classList.remove("hide");
+      quizContainer.classList.add("hide");
+      return;
+    }
+
+    if(this.quiz.currentQuestion == 0)
+    {
+      return;
+    }
+
+    this.quiz.PreviousQuestion()
+    this.paintQuestion();
+    this.paintAnswer();
+  }
+
+  paintQuestion()
+  {
+    const question = document.getElementById("question");
+    const textNode = document.createTextNode(this.quiz.GetQuestion());
+    
+    if(question.firstChild==null)
+    {
+      question.appendChild(textNode,question);
+      return;
+    }
+    question.replaceChild(textNode,question.firstChild)
+  }
+
+  paintAnswer()
+  {
+    const answer = document.getElementById("answer");
+    answer.innerHTML = "";
+    const textNode = document.createTextNode(this.quiz.GetAnswers());  
+    this.createCheckBoxeElement(answer,textNode)
+  }
+
+  createCheckBoxeElement(container,labelsArray)
+  {
+    labelsArray.data.split(',').forEach(answerLabel => 
+      {
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+
+      const label = document.createElement("label");
+      label.appendChild(document.createTextNode(answerLabel));
+
+      container.appendChild(checkbox)
+      container.appendChild(label)
+      container.appendChild(document.createElement("br"))
+
+    });
+  }
 }
 
 
 
-function submitForm()
-{
-  const nameForm = document.getElementById("nameForm");
-  const quizContainer = document.getElementById("quiz-container")
-  nameForm.classList.add("hide")
-  quizContainer.classList.remove("hide")
-  theQuiz.userData.setFirstName(nameForm.elements['fname'].value);
-  theQuiz.userData.setLastName(nameForm.elements['lname'].value);
-  theQuiz.userData.setEmail(nameForm.elements['email'].value);
 
-  console.log(theQuiz)
-}
-
-const theQuiz = new Quiz();
-theQuiz.setData(theRawData);
+const pageHandler = new PageHandler();
+pageHandler.quiz.setData(theRawData);
 // theQuiz.userData.setFirstName("Acs");
-console.log(theQuiz)
+// console.log(pageHandler.quiz)
 
 const startButton = document.getElementById("next-button")
 const prevButton = document.getElementById("prev-button")
 const submitFormButton = document.getElementById("form-button")
 
-startButton.addEventListener('click',nextQuiz)
-prevButton.addEventListener('click',prevQuiz)
+startButton.addEventListener('click',pageHandler.nextQuiz.bind(pageHandler))
+prevButton.addEventListener('click',pageHandler.prevQuiz.bind(pageHandler))
 submitFormButton.addEventListener('click',function(event)
 {
   event.preventDefault();
-  submitForm();
-  console.log("here")
+  pageHandler.submitForm();
 })
 
-submitForm()
-paintQuestion(theQuiz)
-paintQuestion(theQuiz)
-paintAnswer(theQuiz)
-paintAnswer(theQuiz)
+// pageHandler.paintQuestion(pageHandler.quiz)
+// pageHandler.paintQuestion(pageHandler.quiz)
+// pageHandler.paintAnswer(pageHandler.quiz)
+// pageHandler.paintAnswer(pageHandler.quiz)
