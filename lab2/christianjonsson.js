@@ -78,9 +78,13 @@ class Quiz
 
   SetSubmittetAnswers(answer)
   {
+    console.log("------------------")
+    console.log(this.currentQuestion)
     console.log(answer);
+    console.log(answer.data)
     console.log(this.questionAnswers[this.currentQuestion]);
-    this.questionAnswers[this.currentQuestion] = {answer};
+    this.questionAnswers[this.currentQuestion] = answer;
+    console.log(this.questionAnswers)
   }
 
   GetSubmittetAnswers()
@@ -168,10 +172,7 @@ class PageHandler
 
     nameForm.classList.add("hide");
     quizContainer.classList.remove("hide");
-    this.paintQuestion(this.quiz);
-    this.paintAnswer(this.quiz);
-    this.populateRadioBoxesHistory();
-    // this.populateCheckboxesHistory();
+    this.paintAndPopulate();
   }
 
 
@@ -189,12 +190,10 @@ class PageHandler
       return;
     }
 
-    this.quiz.SetSubmittetAnswers(this.checkboxStates)
-    this.quiz.NextQuestion()
-    this.paintQuestion(this.quiz)
-    this.paintAnswer(this.quiz)
-    // this.populateCheckboxesHistory();
-    this.populateRadioBoxesHistory();
+    this.extractTextEntry();
+    // this.quiz.SetSubmittetAnswers(this.checkboxStates)
+    this.quiz.NextQuestion();
+    this.paintAndPopulate();
   }
 
   prevQuiz()
@@ -214,12 +213,10 @@ class PageHandler
       return;
     }
 
-    this.quiz.SetSubmittetAnswers(this.checkboxStates)
+    this.extractTextEntry();
+    // this.quiz.SetSubmittetAnswers(this.checkboxStates)
     this.quiz.PreviousQuestion()
-    this.paintQuestion();
-    this.paintAnswer();
-    // this.populateCheckboxesHistory();
-    this.populateRadioBoxesHistory();
+    this.paintAndPopulate();
   }
 
   paintQuestion()
@@ -236,7 +233,8 @@ class PageHandler
     answer.innerHTML = "";
     const textNode = document.createTextNode(this.quiz.GetAnswers());  
     // this.createCheckBoxElement(answer,textNode)
-    this.createRadioButtonElement(answer,textNode);
+    // this.createRadioButtonElement(answer,textNode);
+    this.createTextEntryElement(answer);
   }
 
   createCheckBoxElement(container,labelsArray)
@@ -338,6 +336,50 @@ class PageHandler
     Object.entries(checkboxStates.answer).forEach(([key, value]) => {
       checkboxElements[key].checked = value;
     });
+  }
+
+  createTextEntryElement(container) {
+    console.log("DEBUG1");
+    const TextEntry = document.createElement("input");
+    TextEntry.setAttribute("id", "TextEntryElement");
+    TextEntry.type = "text";
+    container.appendChild(TextEntry);
+  }
+  
+  extractTextEntry() {
+    const TextEntry = document.getElementById("TextEntryElement")
+    if(TextEntry !== null)
+    {
+      console.log(TextEntry.value)
+      this.quiz.SetSubmittetAnswers(TextEntry.value);
+    }
+  }
+
+  populateTextEntryHistory()
+  {
+    const TextEntry = document.getElementById("TextEntryElement")
+
+    if(TextEntry == null)
+    {
+      return;
+    }
+
+    var text = this.quiz.GetSubmittetAnswers();
+    console.log(text);
+    console.log(typeof(text));
+    text = (text === undefined) ? (""):(text);
+    
+    TextEntry.value = text;
+  }
+
+  paintAndPopulate()
+  {
+    this.paintQuestion();
+    this.paintAnswer();
+    // this.populateCheckboxesHistory();
+    // this.populateRadioBoxesHistory();
+    this.populateTextEntryHistory();
+
   }
 }
 
