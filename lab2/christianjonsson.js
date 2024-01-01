@@ -3,28 +3,36 @@ const theRawData =
   "questions": [
     {
       "question": "What is the capital city of France?",
+      "type": "radiobutton",
       "answers": ["Paris", "London", "Berlin", "Rome"],
-      "correctAnswer": 0
+      "correctAnswer": 0,
+      "mandatory": true
+    },
+    {
+      "question": "Which of these countries are in Europe?",
+      "type": "checkbox",
+      "answers": ["France", "Japan", "Germany", "Australia"],
+      "correctAnswer": [0, 2],
+      "mandatory": false
+    },
+    {
+      "question": "What is the capital city of Italy?",
+      "type": "openentry",
+      "correctAnswer": "Rome",
+      "mandatory": true
     },
     {
       "question": "What is the largest planet in our solar system?",
+      "type": "radiobutton",
       "answers": ["Jupiter", "Saturn", "Neptune", "Uranus"],
-      "correctAnswer": 0
+      "correctAnswer": 0,
+      "mandatory": true
     },
     {
-      "question": "Who is the author of the novel \"Harry Potter\"",
-      "answers": ["J.K. Rowling", "Stephen King", "J.R.R. Tolkien", "Agatha Christie"],
-      "correctAnswer": 0
-    },
-    {
-      "question": "What is the chemical symbol for oxygen?",
-      "answers": ["O", "H", "C", "N"],
-      "correctAnswer": 0
-    },
-    {
-      "question": "What is the Pythagorean theorem?",
-      "answers": ["a² + b² = c²", "c² = a² - b²", "b² = a² + c²", "a² = b² - c²"],
-      "correctAnswer": 0
+      "question": "Who wrote the novel '1984'?",
+      "type": "openentry",
+      "correctAnswer": "George Orwell",
+      "mandatory": true
     }
   ]
 }
@@ -78,13 +86,13 @@ class Quiz
 
   SetSubmittetAnswers(answer)
   {
-    console.log("------------------")
-    console.log(this.currentQuestion)
-    console.log(answer);
-    console.log(answer.data)
-    console.log(this.questionAnswers[this.currentQuestion]);
+    // console.log("------------------")
+    // console.log(this.currentQuestion)
+    // console.log(answer);
+    // console.log(answer.data)
+    // console.log(this.questionAnswers[this.currentQuestion]);
     this.questionAnswers[this.currentQuestion] = answer;
-    console.log(this.questionAnswers)
+    // console.log(this.questionAnswers)
   }
 
   GetSubmittetAnswers()
@@ -92,7 +100,16 @@ class Quiz
     return this.questionAnswers[this.currentQuestion];
   }
 
+  GetQuestionType()
+  {
+    console.log(this.data.questions[this.currentQuestion].type);
+    return this.data.questions[this.currentQuestion].type;
+  }
 
+  IsMandatoryQuestion()
+  {
+    return this.data.mandatory[this.currentQuestion];
+  }
 }
 
 class UserData
@@ -190,8 +207,21 @@ class PageHandler
       return;
     }
 
-    this.extractTextEntry();
-    // this.quiz.SetSubmittetAnswers(this.checkboxStates)
+    if(this.quiz.GetQuestionType() === "radiobutton")
+    {
+      this.quiz.SetSubmittetAnswers(this.checkboxStates)
+    }
+    
+    if(this.quiz.GetQuestionType() === "checkbox")
+    {
+      this.quiz.SetSubmittetAnswers(this.checkboxStates)
+    }
+    
+    if(this.quiz.GetQuestionType() === "openentry")
+    {
+      this.extractTextEntry();
+    }
+
     this.quiz.NextQuestion();
     this.paintAndPopulate();
   }
@@ -213,8 +243,20 @@ class PageHandler
       return;
     }
 
-    this.extractTextEntry();
-    // this.quiz.SetSubmittetAnswers(this.checkboxStates)
+    if(this.quiz.GetQuestionType() === "radiobutton")
+    {
+      this.quiz.SetSubmittetAnswers(this.checkboxStates);
+    }
+    
+    if(this.quiz.GetQuestionType() === "checkbox")
+    {
+      this.quiz.SetSubmittetAnswers(this.checkboxStates);
+    }
+    
+    if(this.quiz.GetQuestionType() === "openentry"){
+      this.extractTextEntry();
+    }
+    
     this.quiz.PreviousQuestion()
     this.paintAndPopulate();
   }
@@ -232,9 +274,23 @@ class PageHandler
     const answer = document.getElementById("answer");
     answer.innerHTML = "";
     const textNode = document.createTextNode(this.quiz.GetAnswers());  
-    // this.createCheckBoxElement(answer,textNode)
-    // this.createRadioButtonElement(answer,textNode);
-    this.createTextEntryElement(answer);
+    
+    if(this.quiz.GetQuestionType() === "radiobutton")
+    {
+      this.createRadioButtonElement(answer,textNode);
+      return;
+    }
+    
+    if(this.quiz.GetQuestionType() === "checkbox")
+    {
+      this.createCheckBoxElement(answer,textNode)
+      return;
+    }
+    
+    if(this.quiz.GetQuestionType() === "openentry"){
+      this.createTextEntryElement(answer);
+      return;
+    }
   }
 
   createCheckBoxElement(container,labelsArray)
@@ -279,9 +335,9 @@ class PageHandler
       return;
     }
 
-    this.checkboxStates = checkboxStates.answer;
+    this.checkboxStates = checkboxStates;
     
-    Object.entries(checkboxStates.answer).forEach(([key, value]) => {
+    Object.entries(checkboxStates).forEach(([key, value]) => {
       checkboxElements[key].checked = value;
     });
   }
@@ -323,17 +379,15 @@ class PageHandler
     const checkboxStates = this.quiz.GetSubmittetAnswers();
     const checkboxElements = document.querySelectorAll('input[type="radio"]');
 
-    console.log(checkboxElements);
-
     if(checkboxStates == null)
     {
       this.checkboxStates = {};
       return;
     }
 
-    this.checkboxStates = checkboxStates.answer;
+    this.checkboxStates = checkboxStates;
     
-    Object.entries(checkboxStates.answer).forEach(([key, value]) => {
+    Object.entries(checkboxStates).forEach(([key, value]) => {
       checkboxElements[key].checked = value;
     });
   }
@@ -376,9 +430,23 @@ class PageHandler
   {
     this.paintQuestion();
     this.paintAnswer();
-    // this.populateCheckboxesHistory();
-    // this.populateRadioBoxesHistory();
-    this.populateTextEntryHistory();
+
+    if(this.quiz.GetQuestionType() === "radiobutton")
+    {
+      this.populateRadioBoxesHistory();
+      return;
+    }
+    
+    if(this.quiz.GetQuestionType() === "checkbox")
+    {
+      this.populateCheckboxesHistory();
+      return;
+    }
+    
+    if(this.quiz.GetQuestionType() === "openentry"){
+      this.populateTextEntryHistory();
+      return;
+    }
 
   }
 }
