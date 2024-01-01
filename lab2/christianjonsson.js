@@ -36,6 +36,7 @@ class Quiz
   {
     this.data = {};
     this.currentQuestion = 0;
+    this.questionAnswers = {};
   }
 
   setData(jsonFile)
@@ -67,8 +68,6 @@ class Quiz
 
   GetQuestion()
   {
-    console.log(this.data.questions)
-    console.log(this.currentQuestion)
     return this.data.questions[this.currentQuestion].question;
   }
 
@@ -76,6 +75,20 @@ class Quiz
   {
     return this.data.questions[this.currentQuestion].answers;
   }
+
+  SetSubmittetAnswers(answer)
+  {
+    console.log(answer);
+    console.log(this.questionAnswers[this.currentQuestion]);
+    this.questionAnswers[this.currentQuestion] = {answer};
+  }
+
+  GetSubmittetAnswers()
+  {
+    return this.questionAnswers[this.currentQuestion];
+  }
+
+
 }
 
 class UserData
@@ -147,23 +160,40 @@ class PageHandler
   submitForm()
   {
     const nameForm = document.getElementById("nameForm");
-    const quizContainer = document.getElementById("quiz-container")
-    nameForm.classList.add("hide")
-    quizContainer.classList.remove("hide")
+    const quizContainer = document.getElementById("quiz-container");
+    
     this.userData.setFirstName(nameForm.elements['fname'].value);
     this.userData.setLastName(nameForm.elements['lname'].value);
     this.userData.setEmail(nameForm.elements['email'].value);
-    console.log(this.userData);
+
+    nameForm.classList.add("hide");
+    quizContainer.classList.remove("hide");
+    this.paintQuestion(this.quiz);
+    this.paintAnswer(this.quiz);
+
+    this.checkboxStates = {};
   }
 
 
   nextQuiz()
   {
     const nameForm = document.getElementById("nameForm");
-    nameForm.classList.add("hide");
+    const quizContainer = document.getElementById("quiz-container");
+    
+    if(!nameForm.classList.contains("hide"))
+    {
+      nameForm.classList.add("hide");
+      quizContainer.classList.remove("hide");
+      this.paintQuestion(this.quiz)
+      this.paintAnswer(this.quiz)
+      return;
+    }
+
+    this.quiz.SetSubmittetAnswers(this.checkboxStates)
     this.quiz.NextQuestion()
     this.paintQuestion(this.quiz)
     this.paintAnswer(this.quiz)
+    this.populateCheckboxesHistory();
   }
 
   prevQuiz()
@@ -183,22 +213,19 @@ class PageHandler
       return;
     }
 
+    this.quiz.SetSubmittetAnswers(this.checkboxStates)
     this.quiz.PreviousQuestion()
     this.paintQuestion();
     this.paintAnswer();
+    this.populateCheckboxesHistory();
   }
 
   paintQuestion()
   {
     const question = document.getElementById("question");
     const textNode = document.createTextNode(this.quiz.GetQuestion());
-    
-    if(question.firstChild==null)
-    {
-      question.appendChild(textNode,question);
-      return;
-    }
-    question.replaceChild(textNode,question.firstChild)
+    question.innerHTML = "";
+    question.appendChild(textNode, question);
   }
 
   paintAnswer()
@@ -206,10 +233,10 @@ class PageHandler
     const answer = document.getElementById("answer");
     answer.innerHTML = "";
     const textNode = document.createTextNode(this.quiz.GetAnswers());  
-    this.createCheckBoxeElement(answer,textNode)
+    this.createCheckBoxElement(answer,textNode)
   }
 
-  createCheckBoxeElement(container,labelsArray)
+  createCheckBoxElement(container,labelsArray)
   {
     labelsArray.data.split(',').forEach(answerLabel => 
       {
@@ -222,9 +249,40 @@ class PageHandler
       container.appendChild(checkbox)
       container.appendChild(label)
       container.appendChild(document.createElement("br"))
+    });
+    this.createCheckBoxEventListerners()
 
+  }
+
+  createCheckBoxEventListerners()
+  {
+    const checkboxElements = document.querySelectorAll('input[type="checkbox"]');
+    this.checkboxStates = {};
+
+    checkboxElements.forEach((checkbox, index) => {
+      checkbox.addEventListener('change', () => {
+        this.checkboxStates[index] = checkbox.checked;
+        console.log(this.checkboxStates)
+      });
+    });
+
+  }
+
+  populateCheckboxesHistory()
+  {
+    const checkboxStates = this.quiz.GetSubmittetAnswers();
+    const checkboxElements = document.querySelectorAll('input[type="checkbox"]');
+
+    if(checkboxStates == null)
+    {
+      return;
+    }
+
+    Object.entries(checkboxStates.answer).forEach(([key, value]) => {
+      checkboxElements[key].checked = value;
     });
   }
+
 }
 
 
