@@ -170,7 +170,8 @@ class PageHandler
     quizContainer.classList.remove("hide");
     this.paintQuestion(this.quiz);
     this.paintAnswer(this.quiz);
-    this.populateCheckboxesHistory();
+    this.populateRadioBoxesHistory();
+    // this.populateCheckboxesHistory();
   }
 
 
@@ -192,7 +193,8 @@ class PageHandler
     this.quiz.NextQuestion()
     this.paintQuestion(this.quiz)
     this.paintAnswer(this.quiz)
-    this.populateCheckboxesHistory();
+    // this.populateCheckboxesHistory();
+    this.populateRadioBoxesHistory();
   }
 
   prevQuiz()
@@ -216,7 +218,8 @@ class PageHandler
     this.quiz.PreviousQuestion()
     this.paintQuestion();
     this.paintAnswer();
-    this.populateCheckboxesHistory();
+    // this.populateCheckboxesHistory();
+    this.populateRadioBoxesHistory();
   }
 
   paintQuestion()
@@ -232,7 +235,8 @@ class PageHandler
     const answer = document.getElementById("answer");
     answer.innerHTML = "";
     const textNode = document.createTextNode(this.quiz.GetAnswers());  
-    this.createCheckBoxElement(answer,textNode)
+    // this.createCheckBoxElement(answer,textNode)
+    this.createRadioButtonElement(answer,textNode);
   }
 
   createCheckBoxElement(container,labelsArray)
@@ -250,7 +254,6 @@ class PageHandler
       container.appendChild(document.createElement("br"))
     });
     this.createCheckBoxEventListerners()
-
   }
 
   createCheckBoxEventListerners()
@@ -271,7 +274,7 @@ class PageHandler
   {
     const checkboxStates = this.quiz.GetSubmittetAnswers();
     const checkboxElements = document.querySelectorAll('input[type="checkbox"]');
-    
+
     if(checkboxStates == null)
     {
       this.checkboxStates = {};
@@ -285,15 +288,61 @@ class PageHandler
     });
   }
 
+
+  createRadioButtonElement(container,labelsArray)
+  {
+    labelsArray.data.split(',').forEach(answerLabel => 
+      {
+      const radioButton = document.createElement("input");
+      radioButton.type = "radio";
+      radioButton.name = "radioGroup"; 
+
+      const label = document.createElement("label");
+      label.appendChild(document.createTextNode(answerLabel));
+
+      container.appendChild(radioButton)
+      container.appendChild(label)
+      container.appendChild(document.createElement("br"))
+    });
+    this.createRadioButtonEventListeners()
+  }
+
+  createRadioButtonEventListeners() {
+    const radioButtons = document.querySelectorAll('input[type="radio"]');
+    this.checkboxStates = {};
+  
+    radioButtons.forEach((radioButton, index) => {
+      radioButton.addEventListener('change', () => {
+        this.checkboxStates = {};
+        this.checkboxStates[index] = radioButton.checked;
+        console.log(this.checkboxStates);
+      });
+    });
+  }
+
+  populateRadioBoxesHistory()
+  {
+    const checkboxStates = this.quiz.GetSubmittetAnswers();
+    const checkboxElements = document.querySelectorAll('input[type="radio"]');
+
+    console.log(checkboxElements);
+
+    if(checkboxStates == null)
+    {
+      this.checkboxStates = {};
+      return;
+    }
+
+    this.checkboxStates = checkboxStates.answer;
+    
+    Object.entries(checkboxStates.answer).forEach(([key, value]) => {
+      checkboxElements[key].checked = value;
+    });
+  }
 }
-
-
-
 
 const pageHandler = new PageHandler();
 pageHandler.quiz.setData(theRawData);
-// theQuiz.userData.setFirstName("Acs");
-// console.log(pageHandler.quiz)
 
 const startButton = document.getElementById("next-button")
 const prevButton = document.getElementById("prev-button")
@@ -306,8 +355,3 @@ submitFormButton.addEventListener('click',function(event)
   event.preventDefault();
   pageHandler.submitForm();
 })
-
-// pageHandler.paintQuestion(pageHandler.quiz)
-// pageHandler.paintQuestion(pageHandler.quiz)
-// pageHandler.paintAnswer(pageHandler.quiz)
-// pageHandler.paintAnswer(pageHandler.quiz)
