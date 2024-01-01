@@ -170,8 +170,7 @@ class PageHandler
     quizContainer.classList.remove("hide");
     this.paintQuestion(this.quiz);
     this.paintAnswer(this.quiz);
-
-    this.checkboxStates = {};
+    this.populateCheckboxesHistory();
   }
 
 
@@ -272,12 +271,15 @@ class PageHandler
   {
     const checkboxStates = this.quiz.GetSubmittetAnswers();
     const checkboxElements = document.querySelectorAll('input[type="checkbox"]');
-
+    
     if(checkboxStates == null)
     {
+      this.checkboxStates = {};
       return;
     }
 
+    this.checkboxStates = checkboxStates.answer;
+    
     Object.entries(checkboxStates.answer).forEach(([key, value]) => {
       checkboxElements[key].checked = value;
     });
