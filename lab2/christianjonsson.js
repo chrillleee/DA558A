@@ -7,6 +7,7 @@ const theRawData =
       "answers": ["Paris", "London", "Berlin", "Rome"],
       "correctAnswer": 0,
       "mandatory": true
+      // "mandatory": false
     },
     {
       "question": "Which of these countries are in Europe?",
@@ -20,6 +21,7 @@ const theRawData =
       "type": "openentry",
       "correctAnswer": "Rome",
       "mandatory": true
+      // "mandatory": false
     },
     {
       "question": "What is the largest planet in our solar system?",
@@ -27,16 +29,18 @@ const theRawData =
       "answers": ["Jupiter", "Saturn", "Neptune", "Uranus"],
       "correctAnswer": 0,
       "mandatory": true
+      // "mandatory": false
     },
     {
       "question": "Who wrote the novel '1984'?",
       "type": "openentry",
-      "correctAnswer": "George Orwell",
+      // "correctAnswer": "George Orwell",
+      "correctAnswer" : "A", 
       "mandatory": true
+      // "mandatory": false
     }
   ]
 }
-
 
 class Quiz 
 {
@@ -86,13 +90,7 @@ class Quiz
 
   SetSubmittetAnswers(answer)
   {
-    // console.log("------------------")
-    // console.log(this.currentQuestion)
-    // console.log(answer);
-    // console.log(answer.data)
-    // console.log(this.questionAnswers[this.currentQuestion]);
     this.questionAnswers[this.currentQuestion] = answer;
-    // console.log(this.questionAnswers)
   }
 
   GetSubmittetAnswers()
@@ -102,7 +100,6 @@ class Quiz
 
   GetQuestionType()
   {
-    console.log(this.data.questions[this.currentQuestion].type);
     return this.data.questions[this.currentQuestion].type;
   }
 
@@ -110,6 +107,104 @@ class Quiz
   {
     return this.data.mandatory[this.currentQuestion];
   }
+
+  IsLastQuestion()
+  {
+    return this.currentQuestion === this.data.questions.length - 1;
+  }
+
+  CheckMandetoryQuestions()
+  {
+    var warning = "";
+    var answer = {};
+    var question = {};
+    console.log(this.questionAnswers)
+    for (var it = 0; it<this.data.questions.length; it++) 
+    {
+      answer = this.questionAnswers[it];
+      question = this.data.questions[it];
+      if(question.mandatory)
+      { 
+        if(answer === null || answer === undefined || Object.keys(answer).length === 0)
+        {
+          warning += " Please answer question " + (it + 1) + "\n";
+        }
+      }
+    }
+    
+    if(warning==="")
+    {
+      return true;
+    }
+
+    alert(warning);
+    return false;
+  }
+
+  CheckCorrectAnswers()
+  {
+    var sumCorrectAnswers = 0;
+    var answer = {};
+    var correctA = {};
+    for (var it = 0; it<this.data.questions.length; it++) 
+    {
+
+      answer = this.questionAnswers[it];
+      correctA = this.data.questions[it].correctAnswer;
+      this.currentQuestion = it;
+
+      if(this.GetQuestionType() === "radiobutton")
+      {
+        console.log("radiobutton")
+        if(Object.keys(answer)[0] == correctA)
+        {
+          sumCorrectAnswers++;
+          continue;
+        }
+        continue;
+      }
+      
+      if(this.GetQuestionType() === "checkbox")
+      {
+        console.log("checkbox")
+        
+        if(Object.keys(answer).length!=correctA.length)
+        {
+          continue;
+        }
+
+        var allCorrect = true;
+        var i = 0;
+        Object.keys(answer).forEach((ans)=>
+        {
+          if(ans != correctA[i])
+          {
+            allCorrect = false;
+          } 
+          i++;  
+        })
+
+        console.log(allCorrect);
+        
+        if(allCorrect)
+        {
+          sumCorrectAnswers++;
+        }
+        continue;
+      }
+      
+      if(this.GetQuestionType() === "openentry"){
+        console.log("openentry")
+        if(answer == correctA)
+        {
+          sumCorrectAnswers++;
+        }
+        continue;
+      }
+    }
+  return sumCorrectAnswers;  
+}
+
 }
 
 class UserData
@@ -118,7 +213,7 @@ class UserData
   {
     this.firstName = {};
     this.lastName = {};
-    this.lastEmail = {};
+    this.email = {};
     this.currentQuestion = 0;
   }
 
@@ -168,6 +263,12 @@ class UserData
     }
     return true;
   }
+
+  AllEntriesValid()
+  {
+    return this.isValidEmail(this.email) && this.isValidName(this.firstName) && this.isValidName(this.lastName);
+  }
+
 }
 
 class PageHandler
@@ -186,6 +287,11 @@ class PageHandler
     this.userData.setFirstName(nameForm.elements['fname'].value);
     this.userData.setLastName(nameForm.elements['lname'].value);
     this.userData.setEmail(nameForm.elements['email'].value);
+
+    if(!this.userData.AllEntriesValid())
+    {
+      return;
+    }
 
     nameForm.classList.add("hide");
     quizContainer.classList.remove("hide");
@@ -207,22 +313,18 @@ class PageHandler
       return;
     }
 
-    if(this.quiz.GetQuestionType() === "radiobutton")
-    {
-      this.quiz.SetSubmittetAnswers(this.checkboxStates)
-    }
-    
-    if(this.quiz.GetQuestionType() === "checkbox")
-    {
-      this.quiz.SetSubmittetAnswers(this.checkboxStates)
-    }
-    
-    if(this.quiz.GetQuestionType() === "openentry")
-    {
-      this.extractTextEntry();
-    }
+    this.SaveAnswers();
 
     this.quiz.NextQuestion();
+
+    if(this.quiz.IsLastQuestion())
+    {
+      const nextButton = document.getElementById("next-button");
+      const finishButton = document.getElementById("finish-button");
+      nextButton.classList.add("hide");
+      finishButton.classList.remove("hide");
+    }
+
     this.paintAndPopulate();
   }
 
@@ -243,20 +345,16 @@ class PageHandler
       return;
     }
 
-    if(this.quiz.GetQuestionType() === "radiobutton")
+    this.SaveAnswers();
+    
+    if(this.quiz.IsLastQuestion())
     {
-      this.quiz.SetSubmittetAnswers(this.checkboxStates);
+      const nextButton = document.getElementById("next-button");
+      const finishButton = document.getElementById("finish-button");
+      nextButton.classList.remove("hide");
+      finishButton.classList.add("hide");
     }
-    
-    if(this.quiz.GetQuestionType() === "checkbox")
-    {
-      this.quiz.SetSubmittetAnswers(this.checkboxStates);
-    }
-    
-    if(this.quiz.GetQuestionType() === "openentry"){
-      this.extractTextEntry();
-    }
-    
+
     this.quiz.PreviousQuestion()
     this.paintAndPopulate();
   }
@@ -318,7 +416,6 @@ class PageHandler
     checkboxElements.forEach((checkbox, index) => {
       checkbox.addEventListener('change', () => {
         this.checkboxStates[index] = checkbox.checked;
-        console.log(this.checkboxStates)
       });
     });
 
@@ -369,7 +466,6 @@ class PageHandler
       radioButton.addEventListener('change', () => {
         this.checkboxStates = {};
         this.checkboxStates[index] = radioButton.checked;
-        console.log(this.checkboxStates);
       });
     });
   }
@@ -393,7 +489,6 @@ class PageHandler
   }
 
   createTextEntryElement(container) {
-    console.log("DEBUG1");
     const TextEntry = document.createElement("input");
     TextEntry.setAttribute("id", "TextEntryElement");
     TextEntry.type = "text";
@@ -404,7 +499,6 @@ class PageHandler
     const TextEntry = document.getElementById("TextEntryElement")
     if(TextEntry !== null)
     {
-      console.log(TextEntry.value)
       this.quiz.SetSubmittetAnswers(TextEntry.value);
     }
   }
@@ -419,10 +513,7 @@ class PageHandler
     }
 
     var text = this.quiz.GetSubmittetAnswers();
-    console.log(text);
-    console.log(typeof(text));
     text = (text === undefined) ? (""):(text);
-    
     TextEntry.value = text;
   }
 
@@ -430,6 +521,7 @@ class PageHandler
   {
     this.paintQuestion();
     this.paintAnswer();
+    this.PaintMandetoryQuestions();
 
     if(this.quiz.GetQuestionType() === "radiobutton")
     {
@@ -449,17 +541,80 @@ class PageHandler
     }
 
   }
+  
+  PaintMandetoryQuestions()
+  {
+    const mandetory = document.getElementById("mandetory");
+    if(this.quiz.data.questions[this.quiz.currentQuestion].mandatory)
+    {
+      mandetory.classList.remove("hide");
+      return;
+    }
+    mandetory.classList.add("hide");
+  }
+
+  SaveAnswers()
+  {
+    if(this.quiz.GetQuestionType() === "radiobutton")
+    {
+      this.quiz.SetSubmittetAnswers(this.checkboxStates);
+    }
+    
+    if(this.quiz.GetQuestionType() === "checkbox")
+    {
+      this.quiz.SetSubmittetAnswers(this.checkboxStates);
+    }
+    
+    if(this.quiz.GetQuestionType() === "openentry"){
+      this.extractTextEntry();
+    }
+  }
+
+  finishQuiz()
+  {
+    console.log("Finish");
+    const prevButton = document.getElementById("prev-button");
+    const finishButton = document.getElementById("finish-button");
+    const quizContainer = document.getElementById("quiz-container");
+    const summaryContainer = document.getElementById("Summary-container");
+    const summary = document.getElementById("summary");
+    const results = document.getElementById("results");
+    
+
+    this.SaveAnswers();
+    if(!this.quiz.CheckMandetoryQuestions())
+    {
+      return;
+    }
+
+    prevButton.classList.add("hide");
+    finishButton.classList.add("hide");
+    quizContainer.classList.add("hide");
+    summaryContainer.classList.remove("hide");
+    
+
+    const resultsTextNode = document.createTextNode("You had the following result: " + this.quiz.CheckCorrectAnswers() + "/" + this.quiz.data.questions.length);
+    results.innerHTML = "";
+    results.appendChild(resultsTextNode, question);
+    
+    // CheckRightAnswers
+    // Present sum of all correct answers
+    // PResent 
+    // Success
+  }
 }
 
 const pageHandler = new PageHandler();
 pageHandler.quiz.setData(theRawData);
 
-const startButton = document.getElementById("next-button")
-const prevButton = document.getElementById("prev-button")
-const submitFormButton = document.getElementById("form-button")
+const startButton = document.getElementById("next-button");
+const prevButton = document.getElementById("prev-button");
+const finishButton = document.getElementById("finish-button");
+const submitFormButton = document.getElementById("form-button");
 
-startButton.addEventListener('click',pageHandler.nextQuiz.bind(pageHandler))
-prevButton.addEventListener('click',pageHandler.prevQuiz.bind(pageHandler))
+startButton.addEventListener('click',pageHandler.nextQuiz.bind(pageHandler));
+prevButton.addEventListener('click',pageHandler.prevQuiz.bind(pageHandler));
+finishButton.addEventListener('click',pageHandler.finishQuiz.bind(pageHandler));
 submitFormButton.addEventListener('click',function(event)
 {
   event.preventDefault();
