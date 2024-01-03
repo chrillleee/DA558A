@@ -626,12 +626,6 @@ class PageHandler
     const resultsTextNode = document.createTextNode("You had the following result: " + this.quiz.CheckCorrectAnswers() + "/" + this.quiz.data.questions.length);
     results.innerHTML = "";
     results.appendChild(resultsTextNode, question);
-    
-
-    // CheckRightAnswers
-    // Present sum of all correct answers
-    // PResent 
-    // Success
   }
 }
 
