@@ -7,7 +7,6 @@ const theRawData =
       "answers": ["Paris", "London", "Berlin", "Rome"],
       "correctAnswer": 0,
       "mandatory": true
-      // "mandatory": false
     },
     {
       "question": "Which of these countries are in Europe?",
@@ -21,7 +20,6 @@ const theRawData =
       "type": "openentry",
       "correctAnswer": "Rome",
       "mandatory": true
-      // "mandatory": false
     },
     {
       "question": "What is the largest planet in our solar system?",
@@ -29,15 +27,12 @@ const theRawData =
       "answers": ["Jupiter", "Saturn", "Neptune", "Uranus"],
       "correctAnswer": 0,
       "mandatory": true
-      // "mandatory": false
     },
     {
       "question": "Who wrote the novel '1984'?",
       "type": "openentry",
-      // "correctAnswer": "George Orwell",
-      "correctAnswer" : "A", 
+      "correctAnswer": "George Orwell",
       "mandatory": true
-      // "mandatory": false
     }
   ]
 }
@@ -118,7 +113,6 @@ class Quiz
     var warning = "";
     var answer = {};
     var question = {};
-    console.log(this.questionAnswers)
     for (var it = 0; it<this.data.questions.length; it++) 
     {
       answer = this.questionAnswers[it];
@@ -155,7 +149,6 @@ class Quiz
 
       if(this.GetQuestionType() === "radiobutton")
       {
-        console.log("radiobutton")
         if(Object.keys(answer)[0] == correctA)
         {
           sumCorrectAnswers++;
@@ -165,9 +158,7 @@ class Quiz
       }
       
       if(this.GetQuestionType() === "checkbox")
-      {
-        console.log("checkbox")
-        
+      {        
         if(Object.keys(answer).length!=correctA.length)
         {
           continue;
@@ -183,8 +174,6 @@ class Quiz
           } 
           i++;  
         })
-
-        console.log(allCorrect);
         
         if(allCorrect)
         {
@@ -194,7 +183,6 @@ class Quiz
       }
       
       if(this.GetQuestionType() === "openentry"){
-        console.log("openentry")
         if(answer == correctA)
         {
           sumCorrectAnswers++;
@@ -551,6 +539,50 @@ class PageHandler
       return;
     }
     mandetory.classList.add("hide");
+ 
+  }
+
+  PaintAllCorrectAnswers()
+  {
+    const summary = document.getElementById("summary");
+    
+    this.quiz.data.questions.forEach((question)=>
+    {var correctA = question.correctAnswer; 
+      
+      var typeQ = question.type;
+      var correctA = question.correctAnswer; 
+      var answer = question.answers; 
+
+
+      if(typeQ === "radiobutton")
+      {
+        summary.innerHTML += "Question: " + question.question;
+        summary.appendChild(document.createElement("br"))
+        summary.innerHTML += "Answer: " + answer[correctA];
+        summary.appendChild(document.createElement("br"))
+      }
+      
+      if(typeQ === "checkbox")
+      {
+        summary.innerHTML += "Question: " + question.question;
+        summary.appendChild(document.createElement("br"))
+        summary.innerHTML += "Answer: ";
+        for(var it = 0; it<correctA.length; it++){
+          var index = correctA[it];
+          summary.innerHTML += answer[index] + " " 
+        }
+        summary.appendChild(document.createElement("br"))
+      }
+      
+      if(typeQ === "openentry"){
+        summary.innerHTML += "Question: " + question.question;
+        summary.appendChild(document.createElement("br"))
+        summary.innerHTML += "Answer: " + correctA;
+        summary.appendChild(document.createElement("br"))        
+      }
+    })
+    
+    return;
   }
 
   SaveAnswers()
@@ -572,12 +604,10 @@ class PageHandler
 
   finishQuiz()
   {
-    console.log("Finish");
     const prevButton = document.getElementById("prev-button");
     const finishButton = document.getElementById("finish-button");
     const quizContainer = document.getElementById("quiz-container");
     const summaryContainer = document.getElementById("Summary-container");
-    const summary = document.getElementById("summary");
     const results = document.getElementById("results");
     
 
@@ -592,11 +622,12 @@ class PageHandler
     quizContainer.classList.add("hide");
     summaryContainer.classList.remove("hide");
     
-
+    pageHandler.PaintAllCorrectAnswers()
     const resultsTextNode = document.createTextNode("You had the following result: " + this.quiz.CheckCorrectAnswers() + "/" + this.quiz.data.questions.length);
     results.innerHTML = "";
     results.appendChild(resultsTextNode, question);
     
+
     // CheckRightAnswers
     // Present sum of all correct answers
     // PResent 
