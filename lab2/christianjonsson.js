@@ -6,33 +6,33 @@ const theRawData =
       "type": "radiobutton",
       "answers": ["Paris", "London", "Berlin", "Rome"],
       "correctAnswer": 0,
-      "mandatory": true
+      "mandatory": false
     },
     {
       "question": "Which of these countries are in Europe?",
       "type": "checkbox",
       "answers": ["France", "Japan", "Germany", "Australia"],
       "correctAnswer": [0, 2],
-      "mandatory": false
+      "mandatory": true
     },
     {
       "question": "What is the capital city of Italy?",
       "type": "openentry",
       "correctAnswer": "Rome",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "question": "What is the largest planet in our solar system?",
       "type": "radiobutton",
       "answers": ["Jupiter", "Saturn", "Neptune", "Uranus"],
       "correctAnswer": 0,
-      "mandatory": true
+      "mandatory": false
     },
     {
       "question": "Who wrote the novel '1984'?",
       "type": "openentry",
       "correctAnswer": "George Orwell",
-      "mandatory": true
+      "mandatory": false
     }
   ]
 }
